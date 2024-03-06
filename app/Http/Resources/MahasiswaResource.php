@@ -21,9 +21,9 @@ class MahasiswaResource extends JsonResource
      */
 
     public  function __construct($status, $message, $resource) {
+        parent::__construct($resource);
         $this->status = $status;
         $this->message= $message;
-        $this->resource = $resource;
     }
 
     /**
