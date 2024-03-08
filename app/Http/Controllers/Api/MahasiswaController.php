@@ -21,7 +21,9 @@ class MahasiswaController extends Controller
 
     public function show($uuid)
     {
-        $mahasiswa = Mahasiswa::where( 'uuid' , $uuid )->first();
+        $mahasiswa = Mahasiswa::where( 'uuid' , $uuid )
+            
+            ->first();
         if(!empty($mahasiswa)){
             return new MahasiswaResource(true,'Detail Data Found',$mahasiswa);
         }else{
