@@ -25,7 +25,7 @@ class MahasiswaController extends Controller
 
     public function show($uuid)
     {
-        $mahasiswa = Mahasiswa::where( 'uuid' , $uuid )
+        $mahasiswa = Mahasiswa::where( 'mhs_id' , $uuid )
             
             ->first();
         if(!empty($mahasiswa)){
@@ -81,5 +81,57 @@ class MahasiswaController extends Controller
             return new MahasiswaResource(true,'Data Berhasil Dihapus',null);
         }
     }
+
+    /**
+     * 
+     * update
+     */
+
+     public function update(Request $request,$uuid)
+     {
+        //define validator
+        $validator = Validator::make($request->all(),[
+            'nama'=>'required|string',
+            'nim'=>'required',
+            'tanggal_lahir'=>'required|date',
+            'prodi_id'=>'required|numeric',
+            'fakultas_id'=>'required|numeric',
+            'alamat'=>'required|string',
+            'email'=>'required|email',
+            'jenis_kelamin'=>'required|string'
+        ]);
+
+        //check validation
+        if ($validator->fails()) {
+            return response()->json($validator->errors(),422);
+        }
+
+        //get data mahasiswa
+        $mahasiswa =Mahasiswa::where('mhs_id',$uuid)->first();
+
+        //jika tidak ada
+        if(!$mahasiswa){
+
+           return new MahasiswaResource(false,"Data tidak ditemukan",404);
+
+        }else{
+
+            //jika ada, update data
+            $mahasiswa->update([
+                'nama'=>$request->nama,
+                'nim'=>$request->nim,
+                'tanggal_lahir'=>$request->tanggal_lahir,
+                'prodi_id'=>$request->prodi_id,
+                'fakultas_id'=>$request->fakultas_id,
+                'alamat'=>$request->alamat,
+                'email'=>strtolower($request->email),
+                'jenis_kelamin'=>$request->jenis_kelamin
+            ]);
+        }
+
+        return new MahasiswaResource(true,"Data Updated",$mahasiswa);
+
+     }
+
 
 }
