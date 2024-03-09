@@ -14,7 +14,11 @@ class MahasiswaController extends Controller
     //
     public function index()
     {
-        $mahasiswa = Mahasiswa::all();
+        $mhs_model = new Mahasiswa();
+
+        $mahasiswa = $mhs_model->join('jurusan','jurusan.id','mahasiswa.prodi_id')
+            ->join('fakultas','fakultas.id','mahasiswa.fakultas_id')
+            ->get();
 
         return new MahasiswaResource(true, 'Data Found',$mahasiswa);
     }
@@ -68,7 +72,14 @@ class MahasiswaController extends Controller
 
     public function destroy($uuid)
     {
-
+        //mencari data berdasarkan uuid dan menghapus data tersebut
+        $mahasiswa=Mahasiswa::where('mhs_id',$uuid)->first();
+        if (!$mahasiswa) {
+            return new MahasiswaResource(false,'Data Tidak Ditemukan',null);
+        }else{
+            $mahasiswa->delete();
+            return new MahasiswaResource(true,'Data Berhasil Dihapus',null);
+        }
     }
 
 }

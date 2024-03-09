@@ -18,7 +18,9 @@ use Illuminate\Support\Facades\Route;
 //     return $request->user();
 // });
 
-Route::apiResource('/mhs',\App\Http\Controllers\Api\MahasiswaController::class);
+Route::apiResource('/mhs',\App\Http\Controllers\Api\MahasiswaController::class)->middleware(["auth:api"]); //Pro
+Route::apiResource('/jurusan',\App\Http\Controllers\Api\JurusanController::class)->middleware(["auth:api"]);
+Route::apiResource('/fakultas',\App\Http\Controllers\Api\FakultasController::class)->middleware(["auth:api"]);
 
 Route::post('/register', App\Http\Controllers\Api\RegisterController::class)->name('register');
 
